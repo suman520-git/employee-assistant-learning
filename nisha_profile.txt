@@ -1,0 +1,2 @@
+Nisha works in the Data Science department and reports to Rahul.
+Her skills are Python and Neo4j.

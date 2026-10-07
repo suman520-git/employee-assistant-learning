@@ -1,0 +1,4 @@
+Vikram works in the Data Science department.
+He reports to Rahul.
+His skills include Python, FastAPI, and Neo4j.
+He is assigned to Project Alpha.
