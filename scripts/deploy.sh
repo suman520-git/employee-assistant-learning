@@ -53,13 +53,14 @@ docker compose -f docker-compose.yml -f compose.aws.yml \
 
 # Check the API and frontend.
 curl --fail --silent --show-error \
-  --retry 12 --retry-connrefused --retry-delay 5 --max-time 10 \
+  --retry 12 --retry-all-errors --retry-delay 5 \
+  --retry-max-time 120 --connect-timeout 5 --max-time 10 \
   http://127.0.0.1:8000/health
 
 curl --fail --silent --show-error \
-  --retry 12 --retry-connrefused --retry-delay 5 --max-time 10 \
+  --retry 12 --retry-all-errors --retry-delay 5 \
+  --retry-max-time 120 --connect-timeout 5 --max-time 10 \
   http://127.0.0.1:8501/_stcore/health
-
 docker compose -f docker-compose.yml -f compose.aws.yml ps
 
 echo "Deployment completed successfully."
