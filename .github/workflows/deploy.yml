@@ -42,6 +42,35 @@ jobs:
       - name: Build Docker image
         run: docker build -t "$ECR_REPOSITORY:$IMAGE_TAG" .
 
+      - name: Check GitHub identity
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+        shell: python
+        run: |
+          import os
+          import json
+          import base64
+          import urllib.request
+
+          url = os.environ["ACTIONS_ID_TOKEN_REQUEST_URL"]
+          url += "&audience=sts.amazonaws.com"
+
+          request = urllib.request.Request(
+              url,
+              headers={
+                  "Authorization": "Bearer " + os.environ["ACTIONS_ID_TOKEN_REQUEST_TOKEN"]
+              },
+          )
+
+          with urllib.request.urlopen(request, timeout=30) as response:
+              token = json.load(response)["value"]
+
+          payload = token.split(".")[1]
+          payload += "=" * (-len(payload) % 4)
+          claims = json.loads(base64.urlsafe_b64decode(payload))
+
+          print("Subject:", claims["sub"])
+          print("Audience:", claims["aud"])
+
       - name: Authenticate with AWS
         if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
         uses: aws-actions/configure-aws-credentials@v6.3.0
