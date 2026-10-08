@@ -1,0 +1,8 @@
+services:
+  api:
+    build: !reset null
+    image: ${APP_IMAGE:?Set APP_IMAGE}
+
+  frontend:
+    build: !reset null
+    image: ${APP_IMAGE:?Set APP_IMAGE}
